@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -6,6 +8,7 @@ class Sale(models.Model):
     product = models.ForeignKey('products.Product', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
     sale_date = models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField(default=datetime.now, blank=True)
 
     class Meta:
         abstract = True
