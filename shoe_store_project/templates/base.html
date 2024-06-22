@@ -4,8 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-     <script src="https://cdn.tailwindcss.com"></script>
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+     <style>
+        .hidden {
+          display: none;
+        }
+
+        .mobile-menu {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
+        }
+
+        .mobile-menu.visible {
+            opacity: 1;
+            visibility: visible;
+            transition-delay: 0s;
+        }
+
+  </style>
 </head>
 <body>
 {% include 'includes/navbar.html' %}
@@ -15,6 +34,58 @@
 {% include 'includes/footer.html' %}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const toggleButtons = document.querySelectorAll('.filter-toggle');
+
+      toggleButtons.forEach(button => {
+        button.addEventListener('click', function () {
+          const target = document.querySelector(this.dataset.target);
+          const isExpanded = this.getAttribute('aria-expanded') === 'true';
+
+          // Toggle the aria-expanded attribute
+          this.setAttribute('aria-expanded', !isExpanded);
+
+          // Toggle the target section visibility
+          target.classList.toggle('hidden');
+
+          // Toggle the icons
+          const icons = this.querySelectorAll('svg');
+          icons.forEach(icon => icon.classList.toggle('hidden'));
+        });
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const menuButton = document.getElementById('menu-button');
+        const sortMenu = document.querySelector('.absolute');
+
+        menuButton.addEventListener('click', function () {
+            const expanded = menuButton.getAttribute('aria-expanded') === 'true' || false;
+            menuButton.setAttribute('aria-expanded', !expanded);
+            sortMenu.classList.toggle('hidden');
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const openFiltersButton = document.querySelector(".open-filters-btn");
+        const mobileMenu = document.querySelector(".mobile-menu");
+
+        // Open mobile menu when clicking on the "Filters" button
+        openFiltersButton.addEventListener("click", function() {
+            mobileMenu.classList.add("visible");
+        });
+
+        const closeFiltersButton = document.querySelector(".close-filters-btn");
+
+        // Close mobile menu when clicking on the "Close menu" button
+        closeFiltersButton.addEventListener("click", function() {
+            mobileMenu.classList.remove("visible");
+        });
+    });
+
+  </script>
 
 </body>
 </html>

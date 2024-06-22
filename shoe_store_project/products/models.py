@@ -10,9 +10,11 @@ class Size(models.Model):
 
 class Color(models.Model):
     color = models.CharField(max_length=30)
+    hex_code = models.CharField(max_length=6, default='000000')  # Example default value
 
     def __str__(self):
         return self.color
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -22,6 +24,13 @@ class Category(models.Model):
         return self.name
 
 class Season(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+class GenerationCategory(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
 
@@ -42,6 +51,7 @@ class Product(models.Model):
     colors = models.ManyToManyField(Color)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     season = models.ForeignKey(Season, on_delete=models.SET_NULL, null=True, blank=True)
+    generation_category = models.ForeignKey(GenerationCategory, on_delete=models.SET_NULL, null=True, blank=True)
     created_date = models.DateTimeField(default=datetime.now, blank=True)
 
     def __str__(self):
