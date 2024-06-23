@@ -4,6 +4,44 @@
 
 {% load static %}
 {% block content %}
+
+<nav class="flex justify-center items-center mt-5" aria-label="Breadcrumb">
+    <ol class="inline-flex items-center space-x-1 md:space-x-2">
+        <li class="inline-flex items-center">
+            <a href="{% url 'home' %}" class="text-gray-700 hover:text-gray-900 inline-flex items-center">
+                <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
+                    </path>
+                </svg>
+                Home
+            </a>
+        </li>
+        <li>
+            <div class="flex items-center">
+                <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                        clip-rule="evenodd"></path>
+                </svg>
+                <a href="{% url 'products' %}" class="text-gray-700 hover:text-gray-900 ml-1 md:ml-2 text-sm font-medium">Products</a>
+            </div>
+        </li>
+        <li>
+            <div class="flex items-center">
+                <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                        clip-rule="evenodd"></path>
+                </svg>
+                <span class="text-gray-400 ml-1 md:ml-2 text-sm font-medium" aria-current="page">Search</span>
+            </div>
+        </li>
+    </ol>
+</nav>
+
 <div class="bg-white">
 
 <div class="relative z-40 mobile-menu lg:hidden">
@@ -19,15 +57,48 @@
                     </svg>
                 </button>
             </div>
-            <form method="GET" class="mt-4 border-t border-gray-200">
-                <h3 class="sr-only">Categories</h3>
-                <ul role="list" class="px-2 py-3 font-medium text-gray-900">
-                    {% for season in seasons %}
-                    <li>
-                        <a href="#" class="block px-2 py-3">{{ season }}</a>
-                    </li>
-                    {% endfor %}
-                </ul>
+            <form method="GET" class="my-4 mx-2 border-t border-gray-200">
+                  <div class="border-t border-gray-200 px-4 py-6">
+                    <h3 class="font-semibold text-gray-700 mb-2">Filtration Tags:</h3>
+                    {% if selected_filters %}
+                        <div class="flex flex-wrap gap-2">
+                            {% for filter_type, filter_values in selected_filters.items %}
+                                {% for value in filter_values %}
+                                    <span class="bg-gray-100 rounded-full px-3 py-1 text-sm font-semibold text-gray-600">#{{ value }}</span>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-gray-500">No filtration tags selected.</p>
+                    {% endif %}
+                </div>
+
+                <div class="border-t border-gray-200 px-4 py-6">
+                    <h3 class="-my-3 flow-root">
+                      <button type="button" class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500 filter-toggle" aria-controls="filter-section-mobile-4" aria-expanded="false" data-target="#filter-section-mobile-4">
+                        <span class="font-medium text-gray-900">Generations</span>
+                        <span class="ml-6 flex items-center">
+                          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                          </svg>
+                          <svg class="h-5 w-5 hidden" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clip-rule="evenodd" />
+                          </svg>
+                        </span>
+                      </button>
+
+                    </h3>
+                    <div class="pt-6 hidden" id="filter-section-mobile-4">
+                      <div class="space-y-6">
+                        {% for generation in generations %}
+                        <div class="flex items-center">
+                          <input  name="generation" value="{{ generation }}" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {% if generation in selected_generations %}checked{% endif %}>
+                          <label  class="ml-3 text-sm text-gray-600">{{ generation }}</label>
+                        </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
                 <div class="border-t border-gray-200 px-4 py-6">
                     <h3 class="-my-3 flow-root">
                       <button type="button" class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500 filter-toggle" aria-controls="filter-section-mobile-0" aria-expanded="false" data-target="#filter-section-mobile-0">
@@ -47,7 +118,7 @@
                         <div class="space-y-6">
                             {% for category in categories %}
                             <div class="flex items-center">
-                              <input  name="category" value="{{ category }}" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {% if category in selected_categories %}checked{% endif %}>
+                              <input  name="category" value="{{ category }}" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {% if category in selected_categories %}checked{% endif %}>
                               <label  class="ml-3 text-sm text-gray-600">{{ category }}</label>
                             </div>
                             {% endfor %}
@@ -115,7 +186,7 @@
 
   <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
-    <h1 class="text-4xl font-bold tracking-tight text-gray-900">New Arrivals</h1>
+    <h1 class="text-4xl font-bold tracking-tight text-gray-900">Search Your Favorite</h1>
     <div class="flex items-center">
         <div class="relative inline-block text-left">
             <div>
@@ -156,7 +227,6 @@
     </div>
     </div>
 
-
     <section aria-labelledby="products-heading" class="pt-6 pb-24">
       <h2 id="products-heading" class="sr-only">Products</h2>
       <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
@@ -169,10 +239,10 @@
                     {% endfor %}
                 {% endfor %}
             </div>
-          <div class="border-b border-gray-200 py-6">
+            <div class="border-b border-gray-200 py-6">
             <h3 class="-my-3 flow-root">
-              <button type="button" class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500 filter-toggle" aria-controls="filter-section-3" aria-expanded="false" data-target="#filter-section-3">
-                <span class="font-medium text-gray-900">Categories</span>
+              <button type="button" class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500 filter-toggle" aria-controls="filter-section-3" aria-expanded="false" data-target="#filter-section-4">
+                <span class="font-medium text-gray-900">Generations</span>
                 <span class="ml-6 flex items-center">
                   <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
@@ -184,70 +254,96 @@
               </button>
 
             </h3>
-            <div class="pt-6 hidden" id="filter-section-3">
+            <div class="pt-6 hidden" id="filter-section-4">
               <div class="space-y-4">
-                {% for category in categories %}
+                {% for generation in generations %}
                 <div class="flex items-center">
-                  <input  name="category" value="{{ category }}" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {% if category in selected_categories %}checked{% endif %}>
-                  <label  class="ml-3 text-sm text-gray-600">{{ category }}</label>
+                  <input  name="generation" value="{{ generation }}" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {% if generation in selected_generations %}checked{% endif %}>
+                  <label  class="ml-3 text-sm text-gray-600">{{ generation }}</label>
                 </div>
                 {% endfor %}
               </div>
             </div>
           </div>
-          <div class="border-b border-gray-200 py-6">
-            <h3 class="-my-3 flow-root">
-              <button type="button" class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500 filter-toggle" aria-controls="filter-section-0" aria-expanded="false" data-target="#filter-section-0">
-                <span class="font-medium text-gray-900">Color</span>
-                <span class="ml-6 flex items-center">
-                  <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-                  </svg>
-                  <svg class="h-5 w-5 hidden" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clip-rule="evenodd" />
-                  </svg>
-                </span>
-              </button>
+              <div class="border-b border-gray-200 py-6">
+                <h3 class="-my-3 flow-root">
+                  <button type="button" class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500 filter-toggle" aria-controls="filter-section-3" aria-expanded="false" data-target="#filter-section-3">
+                    <span class="font-medium text-gray-900">Categories</span>
+                    <span class="ml-6 flex items-center">
+                      <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                      </svg>
+                      <svg class="h-5 w-5 hidden" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clip-rule="evenodd" />
+                      </svg>
+                    </span>
+                  </button>
 
-            </h3>
-            <div class="pt-6 hidden" id="filter-section-0">
-              <div class="space-y-4">
-                {% for color in colors %}
-                <div class="flex items-center">
-                  <input id="filter-color-{{ forloop.counter }}" name="color" value="{{ color }}" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {% if color in selected_colors %}checked{% endif %}>
-                  <label for="filter-color-{{ forloop.counter }}" class="ml-3 text-sm text-gray-600">{{ color }}</label>
+                </h3>
+                <div class="pt-6 hidden" id="filter-section-3">
+                  <div class="space-y-4">
+                    {% for category in categories %}
+                    <div class="flex items-center">
+                      <input  name="category" value="{{ category }}" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {% if category in selected_categories %}checked{% endif %}>
+                      <label  class="ml-3 text-sm text-gray-600">{{ category }}</label>
+                    </div>
+                    {% endfor %}
+                  </div>
                 </div>
-                {% endfor %}
               </div>
-            </div>
-          </div>
-          <div class="border-b border-gray-200 py-6">
-            <h3 class="-my-3 flow-root">
-              <button type="button" class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500 filter-toggle" data-target="#filter-section-2">
-                <span class="font-medium text-gray-900">Size</span>
-                <span class="ml-6 flex items-center">
-                  <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-                  </svg>
-                  <svg class="h-5 w-5 hidden" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clip-rule="evenodd" />
-                  </svg>
-                </span>
-              </button>
+              <div class="border-b border-gray-200 py-6">
+                <h3 class="-my-3 flow-root">
+                  <button type="button" class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500 filter-toggle" aria-controls="filter-section-0" aria-expanded="false" data-target="#filter-section-0">
+                    <span class="font-medium text-gray-900">Color</span>
+                    <span class="ml-6 flex items-center">
+                      <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                      </svg>
+                      <svg class="h-5 w-5 hidden" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clip-rule="evenodd" />
+                      </svg>
+                    </span>
+                  </button>
 
-            </h3>
-            <div class="pt-6 hidden" id="filter-section-2">
-              <div class="space-y-4">
-                {% for size in sizes %}
-                <div class="flex items-center">
-                  <input id="filter-size-{{ forloop.counter }}" name="size" value="{{ size }}" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {% if size in selected_sizes %}checked{% endif %}>
-                  <label for="filter-size-{{ forloop.counter }}" class="ml-3 text-sm text-gray-600">{{ size }}</label>
+                </h3>
+                <div class="pt-6 hidden" id="filter-section-0">
+                  <div class="space-y-4">
+                    {% for color in colors %}
+                    <div class="flex items-center">
+                      <input id="filter-color-{{ forloop.counter }}" name="color" value="{{ color }}" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {% if color in selected_colors %}checked{% endif %}>
+                      <label for="filter-color-{{ forloop.counter }}" class="ml-3 text-sm text-gray-600">{{ color }}</label>
+                    </div>
+                    {% endfor %}
+                  </div>
                 </div>
-                {% endfor %}
               </div>
-            </div>
-          </div>
-          <button type="submit" class="mt-4 w-full bg-indigo-600 text-white py-2 rounded">Apply Filters</button>
+              <div class="border-b border-gray-200 py-6">
+                <h3 class="-my-3 flow-root">
+                  <button type="button" class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500 filter-toggle" data-target="#filter-section-2">
+                    <span class="font-medium text-gray-900">Size</span>
+                    <span class="ml-6 flex items-center">
+                      <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                      </svg>
+                      <svg class="h-5 w-5 hidden" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clip-rule="evenodd" />
+                      </svg>
+                    </span>
+                  </button>
+
+                </h3>
+                <div class="pt-6 hidden" id="filter-section-2">
+                  <div class="space-y-4">
+                    {% for size in sizes %}
+                    <div class="flex items-center">
+                      <input id="filter-size-{{ forloop.counter }}" name="size" value="{{ size }}" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {% if size in selected_sizes %}checked{% endif %}>
+                      <label for="filter-size-{{ forloop.counter }}" class="ml-3 text-sm text-gray-600">{{ size }}</label>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="mt-4 w-full bg-indigo-600 text-white py-2 rounded">Apply Filters</button>
         </form>
         <!-- Product grid -->
         <div class="lg:col-span-3">
@@ -265,24 +361,25 @@
                 </div>
             </div>
           </div>
-          <div class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
-            {% for product in products %}
-            <div class="group relative bg-white border border-gray-200 rounded-lg flex flex-col overflow-hidden">
-               <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
-                <img src="{{ product.image.url }}" alt="Tall slender porcelain bottle with natural clay textured body and cork stopper." class="h-full w-full object-cover object-center group-hover:opacity-75">
-              </div>
-              <div class="flex-1 p-4 space-y-2 flex flex-col">
-                <h3 class="text-sm font-medium text-gray-900">
-                  <a href="#">
-                    <span aria-hidden="true" class="absolute inset-0"></span>
-                    {{ product.name }}
-                  </a>
-                </h3>
-                <p class="text-sm text-gray-500">${{ product.price }}</p>
-              </div>
+            <div class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+                {% for product in products %}
+                    <div class="group relative bg-white border border-gray-200 rounded-lg flex flex-col overflow-hidden">
+                        <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
+                            <img src="{{ product.image.url }}" alt="Tall slender porcelain bottle with natural clay textured body and cork stopper." class="h-full w-full object-cover object-center group-hover:opacity-75">
+                        </div>
+                        <div class="flex-1 p-4 space-y-2 flex flex-col">
+                            <h3 class="text-sm font-medium text-gray-900">
+                                <a href="{% url 'product_details' product.id %}">
+                                    <span aria-hidden="true" class="absolute inset-0"></span>
+                                    {{ product.name }}
+                                </a>
+                            </h3>
+                            <p class="text-sm text-gray-500">${{ product.price }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-          </div>
+
         </div>
       </div>
     </section>

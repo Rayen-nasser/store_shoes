@@ -1,7 +1,7 @@
 {% load static %}
 {% block content %}
 
-<footer class="w-full">
+<footer class="w-full border-t border-gray-200">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <!--Grid-->
             <div class="grid grid-cols-12 gap-8 py-14 lg:grid-cols-8">
@@ -54,6 +54,7 @@
                     <ul class="text-gray-600 transition-all duration-500  ">
                         <li class="mb-6"><a href="{% url 'home' %}"  class="text-gray-600 hover:text-gray-900">Home</a></li>
                         <li class="mb-6"><a href="{% url 'about' %}"  class=" text-gray-600 hover:text-gray-900">About</a></li>
+                        <li class="mb-6"><a href="{% url 'services' %}"  class=" text-gray-600 hover:text-gray-900">Services</a></li>
                         <li class="mb-6"><a href="{% url 'search' %}"  class=" text-gray-600 hover:text-gray-900">Search</a></li>
                         <li class="sm:mb-6"><a href="{% url 'contact' %}"  class=" text-gray-600 hover:text-gray-900">Contact</a></li>
                     </ul>
@@ -65,7 +66,7 @@
                         <form method="post" >
                             {% csrf_token %}
                             <input type="text" name="subscribe" class="w-full h-12 border border-gray-300 rounded-full py-2.5 px-5 shadow-sm text-gray-800 mb-5 text-center lg:text-left placeholder:text-gray-400 focus:outline-none focus:border-gray-500"  placeholder="Your email here.."/>
-                            <button type="submit" class="h-11 py-3 px-6 bg-indigo-600 transition-all duration-500 shadow-md rounded-full text-sm text-white font-semibold w-fit hover:bg-indigo-700">Subscribe</button>
+                            <button type="submit" class="h-11 py-3 px-6 bg-blue-600 transition-all duration-500 shadow-md rounded-full text-sm text-white font-semibold w-fit hover:bg-blue-700">Subscribe</button>
                         </form>
                     </div>
                 </div>

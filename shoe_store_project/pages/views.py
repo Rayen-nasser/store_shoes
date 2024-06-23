@@ -1,12 +1,26 @@
 from django.conf import settings
 from django.core.mail import send_mail
+from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from pages.models import Subscribe
 from django.contrib import messages
 
+from products.models import Product
+
+
 def home(request):
+    products_list = Product.objects.order_by('-created_date')
+    paginator = Paginator(products_list, 8)  # Show 8 products per page
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'page_obj': page_obj,
+    }
+
     if request.method == 'POST':
         email = request.POST.get('subscribe')
         if email:
@@ -15,7 +29,8 @@ def home(request):
             return redirect('home')  # Redirect to home to avoid re-submission on refresh
         else:
             return HttpResponse("Invalid email input", status=400)
-    return render(request, 'pages/home.html')
+
+    return render(request, 'pages/home.html', context)
 
 def contact(request):
     if request.method == 'POST':
@@ -43,4 +58,7 @@ def contact(request):
 
 def about(request):
     return render(request, 'pages/about.html')
+
+def services(request):
+    return render(request, 'pages/services.html')
 

@@ -44,5 +44,144 @@
     </button>
 </div>
 
+<div class=" py-8">
+<div class="text-center p-10">
+    <h1 class="font-bold text-3xl md:text-4xl mb-2 md:mb-4">Discover Our Latest Products</h1>
+    <h2 class="text-xl md:text-2xl">Explore our wide range of high-quality products</h2>
+</div>
+
+
+
+<!-- ✅ Grid Section - Starts Here 👇 -->
+<section id="Projects"
+    class="w-fit mx-auto grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 justify-items-center justify-center gap-y-10 gap-x-5 mt-10 mb-5">
+
+    {% for product in page_obj %}
+    <!--   ✅ Product card - Starts Here 👇 -->
+    <div class="w-70 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
+        <a href="{% url 'product_details' product.id %}">
+            <img src="{{ product.image.url }}"
+                 alt="Product" class="h-70 w-60 object-cover rounded-t-xl" />
+            <div class="px-4 py-3 w-60">
+                <span class="text-gray-400 mr-3 uppercase text-xs">{{ product.category }}</span>
+                <p class="text-lg font-bold text-black truncate block capitalize">{{ product.name }}</p>
+                <div class="flex items-center">
+                    <p class="text-lg font-semibold text-black cursor-auto my-3">${{ product.cost }}</p>
+                    <del>
+                        <p class="text-sm text-gray-600 cursor-auto ml-2">${{ product.price }}</p>
+                    </del>
+                    <div class="ml-auto"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                              fill="currentColor" class="bi bi-bag-plus" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                              d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z" />
+                        <path
+                                d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
+                    </svg></div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <!--   🛑 Product card - Ends Here  -->
+    {% endfor %}
+
+</section>
+<!-- 🛑 Grid Section - Ends Here -->
+
+<!--  start pagination-->
+<div class="flex justify-center mt-10 space-x-2">
+    {% if page_obj.has_previous %}
+    <a href="?page=1"
+        class="px-2 py-1 sm:px-4 sm:py-2 mt-2 text-gray-600 border rounded-lg hover:bg-gray-100 focus:outline-none">First
+    </a>
+    <a href="?page={{ page_obj.previous_page_number }}"
+        class="px-2 py-1 sm:px-4 sm:py-2 mt-2 text-gray-600 border rounded-lg hover:bg-gray-100 focus:outline-none">Previous
+    </a>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+            <span class="px-2 py-1 sm:px-4 sm:py-2 mt-2 text-gray-600 border rounded-lg bg-blue-600 text-white focus:outline-none">{{ num }}</span>
+        {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
+            <a href="?page={{ num }}"
+                class="px-2 py-1 sm:px-4 sm:py-2 mt-2 text-gray-600 border rounded-lg hover:bg-gray-100 focus:outline-none">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}"
+        class="px-2 py-1 sm:px-4 sm:py-2 mt-2 text-gray-600 border rounded-lg hover:bg-gray-100 focus:outline-none">Next
+    </a>
+    <a href="?page={{ page_obj.paginator.num_pages }}"
+        class="px-2 py-1 sm:px-4 sm:py-2 mt-2 text-gray-600 border rounded-lg hover:bg-gray-100 focus:outline-none">Last
+    </a>
+    {% endif %}
+</div>
+<!--  end pagination-->
+
+
+</div>
+
+<div class="sm:flex items-center max-w-screen-xl">
+    <div class="sm:w-1/2 p-10">
+        <div class="image object-center text-center">
+            <img src="https://i.imgur.com/WbQnbas.png" alt="Shoe Store Image">
+        </div>
+    </div>
+    <div class="sm:w-1/2 p-5">
+        <div class="text">
+            <span class="text-gray-500 border-b-2 border-blue-600 uppercase">About our Store</span>
+            <h2 class="my-4 font-bold text-3xl  sm:text-4xl ">Welcome to <span class="text-blue-600">Our Shoe Store</span>
+            </h2>
+            <p class="text-gray-700">
+                At Our Shoe Store, we are passionate about providing our customers with the finest selection of footwear. Whether you're looking for casual shoes, sneakers, boots, or sandals, we've got you covered. Our mission is to ensure that every customer finds the perfect pair of shoes to fit their style and needs.
+            </p>
+        </div>
+    </div>
+</div>
+
+<section class="text-gray-700 body-font bg-blue-50 ">
+  <div class="flex justify-center py-12 text-4xl font-regular">
+    Our Services
+  </div>
+  <div class="container px-5 py-12 mx-auto mt-8">
+    <div class="flex flex-wrap text-center justify-center">
+      <div class="p-4 md:w-1/4 sm:w-1/2">
+        <div class="px-4 py-6 transform transition duration-500 hover:scale-110">
+          <div class="flex justify-center">
+            <i class="fas fa-shoe-prints text-6xl mb-3"></i>
+          </div>
+          <h2 class="title-font font-regular text-2xl text-gray-900">Wide Range of Shoes</h2>
+        </div>
+      </div>
+
+      <div class="p-4 md:w-1/4 sm:w-1/2">
+        <div class="px-4 py-6 transform transition duration-500 hover:scale-110">
+          <div class="flex justify-center">
+            <i class="fas fa-tags text-6xl mb-3"></i>
+          </div>
+          <h2 class="title-font font-regular text-2xl text-gray-900">Affordable Prices</h2>
+        </div>
+      </div>
+
+      <div class="p-4 md:w-1/4 sm:w-1/2">
+        <div class="px-4 py-6 transform transition duration-500 hover:scale-110">
+          <div class="flex justify-center">
+            <i class="fas fa-shipping-fast text-6xl mb-3"></i>
+          </div>
+          <h2 class="title-font font-regular text-2xl text-gray-900">Fast Shipping</h2>
+        </div>
+      </div>
+
+      <div class="p-4 md:w-1/4 sm:w-1/2">
+        <div class="px-4 py-6 transform transition duration-500 hover:scale-110">
+          <div class="flex justify-center">
+            <i class="fas fa-headset text-6xl mb-3"></i>
+          </div>
+          <h2 class="title-font font-regular text-2xl text-gray-900">Expert Customer Support</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 {% endblock %}
