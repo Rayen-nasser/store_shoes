@@ -27,6 +27,10 @@
   </style>
 </head>
 <body>
+    <div class="fixed top-4 right-4 z-50 space-y-4">
+        {% include 'includes/messages.html' %}
+    </div>
+{% include 'includes/topbar.html' %}
 {% include 'includes/navbar.html' %}
 {% block content %}
 
@@ -84,6 +88,7 @@
             mobileMenu.classList.remove("visible");
         });
     });
+
 
   </script>
 

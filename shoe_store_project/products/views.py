@@ -2,6 +2,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from .models import Product, Category, Season, Color, Size, GenerationCategory
+from accounts.models import SaveFavorite
 
 
 def products(request):
@@ -31,8 +32,12 @@ def products(request):
 
 def product_details(request, id):
     product = get_object_or_404(Product, id=id)
+    is_favorite = False
+    if request.user.is_authenticated:
+        is_favorite = SaveFavorite.objects.filter(user=request.user, product=product).exists()
     context = {
-        'product': product
+        'product': product,
+        'is_favorite': is_favorite
     }
     return render(request, 'products/product_details.html', context)
 
