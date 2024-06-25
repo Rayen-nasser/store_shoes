@@ -8,7 +8,7 @@ from pages.models import Subscribe
 from django.contrib import messages
 
 from products.models import Product
-
+from accounts.models import SaveFavorite
 
 def home(request):
     products_list = Product.objects.order_by('-created_date')
@@ -16,6 +16,16 @@ def home(request):
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+
+    if request.user.is_authenticated:
+        # Get the list of product IDs that are favorites for the authenticated user
+        favorite_product_ids = SaveFavorite.objects.filter(user=request.user).values_list('product_id', flat=True)
+    else:
+        favorite_product_ids = []
+
+    # Annotate each product with whether it is a favorite for the authenticated user
+    for product in page_obj:
+        product.is_favorite = product.id in favorite_product_ids
 
     context = {
         'page_obj': page_obj,
