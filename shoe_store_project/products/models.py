@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.db import models
-
+from django.contrib.auth.models import User
 class Size(models.Model):
     size = models.CharField(max_length=3)
 
@@ -57,3 +57,15 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+class Rating(models.Model):
+    product = models.ForeignKey(Product, related_name='ratings', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='ratings', on_delete=models.CASCADE)
+    score = models.IntegerField(default=0)  # Rating score
+    comment = models.TextField(blank=True, null=True)  # Optional comment
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('product', 'user')  # Ensure a user can rate a product only once
+
+    def __str__(self):
+        return f'{self.user.username} - {self.product.name} - {self.score}'
