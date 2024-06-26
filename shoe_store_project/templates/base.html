@@ -62,13 +62,22 @@
     });
 
     document.addEventListener('DOMContentLoaded', function () {
-        const menuButton = document.getElementById('menu-button');
-        const sortMenu = document.querySelector('.absolute');
+        const sortButton = document.getElementById('menu-sort-button');
+        const sortMenu = document.getElementById('menu-sort');
 
-        menuButton.addEventListener('click', function () {
-            const expanded = menuButton.getAttribute('aria-expanded') === 'true' || false;
-            menuButton.setAttribute('aria-expanded', !expanded);
+        sortButton.addEventListener('click', function () {
+            const isExpanded = sortButton.getAttribute('aria-expanded') === 'true';
+            sortButton.setAttribute('aria-expanded', !isExpanded);
             sortMenu.classList.toggle('hidden');
+        });
+
+        // Optionally, close the menu when clicking outside of it
+        document.addEventListener('click', function (event) {
+            const isClickInside = sortButton.contains(event.target) || sortMenu.contains(event.target);
+            if (!isClickInside) {
+                sortMenu.classList.add('hidden');
+                sortButton.setAttribute('aria-expanded', 'false');
+            }
         });
     });
 
@@ -88,6 +97,29 @@
             mobileMenu.classList.remove("visible");
         });
     });
+
+    document.addEventListener("DOMContentLoaded", function() {
+    const stars = document.querySelectorAll('.star');
+
+    stars.forEach(function(star) {
+        star.addEventListener('click', function() {
+            const rating = parseInt(star.getAttribute('data-rating'));
+            document.getElementById('selectedRating').value = rating;
+            highlightStars(rating);
+        });
+    });
+
+    function highlightStars(rating) {
+        stars.forEach(function(star) {
+            const starRating = parseInt(star.getAttribute('data-rating'));
+            if (starRating <= rating) {
+                star.classList.add('text-yellow-300'); // Apply colored style
+            } else {
+                star.classList.remove('text-yellow-300'); // Remove colored style
+            }
+        });
+    }
+});
 
 
   </script>

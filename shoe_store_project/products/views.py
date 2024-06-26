@@ -1,7 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.shortcuts import render, get_object_or_404
-from .models import Product, Category, Season, Color, Size, GenerationCategory
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Product, Category, Season, Color, Size, GenerationCategory, Rating
 from accounts.models import SaveFavorite
 
 
@@ -40,17 +41,58 @@ def products(request):
     }
     return render(request, 'products/products.html', context)
 
-def product_details(request, id):
-    product = get_object_or_404(Product, id=id)
+
+def product_detail(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    reviews = Rating.objects.filter(product=product)
+
+    # Calculate the average rating
+    total_score = sum(review.score for review in reviews)
+    review_count = reviews.count()
+    avg_rating = total_score // review_count if review_count > 0 else 0
+
     is_favorite = False
     if request.user.is_authenticated:
         is_favorite = SaveFavorite.objects.filter(user=request.user, product=product).exists()
-    context = {
-        'product': product,
-        'is_favorite': is_favorite
-    }
-    return render(request, 'products/product_details.html', context)
 
+    return render(request, 'products/product_details.html', {
+        'product': product,
+        'reviews': reviews,
+        'is_favorite': is_favorite,
+        'avg_rating': avg_rating,
+    })
+
+
+@login_required
+def add_review(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment')
+
+        if rating and comment:
+            # Check if the user has already reviewed this product
+            existing_review = Rating.objects.filter(product=product, user=request.user).exists()
+            if existing_review:
+                # If the user has already reviewed this product, update the existing review
+                review = Rating.objects.get(product=product, user=request.user)
+                review.score = rating
+                review.comment = comment
+                review.save()
+            else:
+                # If the user has not reviewed this product yet, create a new review
+                review = Rating.objects.create(
+                    product=product,
+                    user=request.user,
+                    score=rating,
+                    comment=comment
+                )
+
+            return redirect('product_details', pk=product.pk)
+
+    # Redirect back to the product detail page if the request method is not POST
+    return redirect('product_details', pk=product.pk)
 def get_search_options():
     categories = Category.objects.all()
     seasons = Season.objects.all()

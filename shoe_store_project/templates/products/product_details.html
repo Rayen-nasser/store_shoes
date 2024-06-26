@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_filters %}
 {% block content %}
 
 
@@ -41,47 +42,40 @@
 </nav>
 
 
-<!-- component -->
 <section class="text-gray-700 body-font overflow-hidden bg-white">
   <div class="container px-5 py-24 mx-auto">
     <div class="flex flex-wrap -mx-4">
       <div class="lg:w-1/2 w-full lg:px-4">
         <img alt="ecommerce" class="lg:h-96 lg:w-full object-cover object-center rounded-lg border border-gray-200 mb-3" src="{{ product.image.url }}">
         <div class="flex flex-row justify-between items-center">
-    {% if product.image_1 %}
-        <img class="w-30 h-20 lg:w-1/3 lg:h-auto object-cover object-center rounded-lg border border-gray-200 mb-2" src="{{ product.image_1.url }}" alt="{{ product.name }} Image 1">
-    {% endif %}
-    {% if product.image_2 %}
-        <img class="w-30 h-20 lg:w-1/3 lg:h-auto object-cover object-center rounded-lg border border-gray-200 mb-2" src="{{ product.image_2.url }}" alt="{{ product.name }} Image 2">
-    {% endif %}
-    {% if product.image_3 %}
-        <img class="w-30 h-20 lg:w-1/3 lg:h-auto object-cover object-center rounded-lg border border-gray-200" src="{{ product.image_3.url }}" alt="{{ product.name }} Image 3">
-    {% endif %}
-</div>
-</div>
-
+            {% if product.image_1 %}
+                <img class="w-30 h-20 lg:w-1/3 lg:h-auto object-cover object-center rounded-lg border border-gray-200 mb-2" src="{{ product.image_1.url }}" alt="{{ product.name }} Image 1">
+            {% endif %}
+            {% if product.image_2 %}
+                <img class="w-30 h-20 lg:w-1/3 lg:h-auto object-cover object-center rounded-lg border border-gray-200 mb-2" src="{{ product.image_2.url }}" alt="{{ product.name }} Image 2">
+            {% endif %}
+            {% if product.image_3 %}
+                <img class="w-30 h-20 lg:w-1/3 lg:h-auto object-cover object-center rounded-lg border border-gray-200" src="{{ product.image_3.url }}" alt="{{ product.name }} Image 3">
+            {% endif %}
+        </div>
+      </div>
 
       <div class="lg:w-1/2 lg:px-4 mt-6 lg:mt-0">
         <h2 class="text-sm title-font text-gray-500 tracking-widest">{{ product.category }}</h2>
         <h1 class="text-gray-900 text-3xl title-font font-medium mb-1">{{ product.name }}</h1>
         <div class="flex mb-4">
           <span class="flex items-center">
-            <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-            </svg>
-            <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-            </svg>
-            <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-            </svg>
-            <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-            </svg>
-            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-            </svg>
-            <span class="text-gray-600 ml-3">4 Reviews</span>
+            {% for _ in 0|up_to:avg_rating %}
+                <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                </svg>
+            {% endfor %}
+            {% for _ in avg_rating|up_to:5 %}
+                <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-gray-300" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                </svg>
+            {% endfor %}
+            <span class="text-gray-600 ml-3">{{ reviews.count }} Reviews</span>
           </span>
           <span class="flex ml-3 pl-3 py-2 border-l-2 border-gray-200">
             <a class="text-gray-500">
@@ -114,7 +108,7 @@
             <div class="relative">
               <select class="rounded border appearance-none border-gray-400 py-2 focus:outline-none focus:border-red-500 text-base pl-3 pr-10">
                {% for size in product.sizes.all %}
-                <option value="{{ size  }}">{{ size  }}</option>
+                <option value="{{ size }}">{{ size }}</option>
                 {% endfor %}
               </select>
               <span class="absolute right-0 top-0 h-full w-10 text-center text-gray-600 pointer-events-none flex items-center justify-center">
@@ -127,7 +121,7 @@
         </div>
         <div class="flex">
           <span class="title-font font-medium text-2xl text-gray-900">${{ product.price }}</span>
-          <button class="flex ml-auto text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded">Button</button>
+          <button class="flex ml-auto text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded">Add to Cart</button>
           <button class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
               <a href="{% url 'save_favorite' product.id %}">
                 {% if is_favorite %}
@@ -139,13 +133,66 @@
                         <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
                     </svg>
                 {% endif %}
-            </a>
-
+              </a>
           </button>
         </div>
+
+
       </div>
+
+        <!-- Reviews Section -->
+        <div class="mt-10 w-full">
+          <h2 class="text-gray-900 text-2xl title-font font-medium mb-1">Customer Reviews</h2>
+          <!-- Reviews List -->
+          <div class="mt-6">
+            {% for review in reviews %}
+              <div class="border-t border-gray-200 py-6">
+                <div class="flex items-center">
+                  <span class="flex items-center">
+                    {% for _ in 0|up_to:review.score %}
+                <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                </svg>
+            {% endfor %}
+            {% for _ in review.score|up_to:5 %}
+                <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-gray-300" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                </svg>
+            {% endfor %}
+                  </span>
+                  <span class="ml-4 text-gray-600">{{ review.user.username }}</span>
+                </div>
+                <p class="mt-2 text-gray-600">{{ review.comment }}</p>
+              </div>
+            {% empty %}
+              <p class="text-gray-600">No reviews yet. Be the first to review this product!</p>
+            {% endfor %}
+          </div>
+
+          <!-- Write a Review Form -->
+          <div class="mt-6">
+            <h3 class="text-gray-900 text-xl title-font font-medium mb-4">Write a Review</h3>
+            <form method="post" action="{% url 'add_review' product.id %}">
+              {% csrf_token %}
+             <div class="flex items-center" id="ratingStars">
+                {% for star in 1|up_to:6 %}
+                    <svg class=" w-8 h-8 star" data-rating="{{ star }}" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                    </svg>
+                {% endfor %}
+            </div>
+            <input type="hidden" id="selectedRating" name="rating" value="0">
+              <div class="mt-4 mb-4">
+                <label for="comment" class="block text-gray-700">Comment</label>
+                <textarea id="comment" name="comment" rows="4" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"></textarea>
+              </div>
+              <div class="flex items-center justify-end">
+                <button type="submit" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
     </div>
   </div>
 </section>
-
 {% endblock %}
