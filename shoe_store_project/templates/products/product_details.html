@@ -66,9 +66,9 @@
         <div class="flex mb-4">
           <span class="flex items-center">
             {% for _ in 0|up_to:avg_rating %}
-                <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                </svg>
+                <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-yellow-500" viewBox="0 0 24 24">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                                    </svg>
             {% endfor %}
             {% for _ in avg_rating|up_to:5 %}
                 <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-gray-300" viewBox="0 0 24 24">
@@ -239,39 +239,107 @@
                 {% endif %}
             </div>
 
-          <!-- Write a Review Form -->
-          <div class="mt-6">
-               {% if user.is_authenticated %}
-                <!-- Review Form for Logged-in Users -->
-                    <h3 class="text-gray-900 text-xl title-font font-medium mb-4">Write a Review</h3>
-                    <form method="post" action="{% url 'add_review' product.id %}">
-                      {% csrf_token %}
-                     <div class="flex items-center" id="ratingStars">
-                        {% for star in 1|up_to:6 %}
-                            <svg class=" w-8 h-8 star" data-rating="{{ star }}" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                            </svg>
-                        {% endfor %}
-                    </div>
-                    <input type="hidden" id="selectedRating" name="rating" value="0">
-                      <div class="mt-4 mb-4">
-                        <label for="comment" class="block text-gray-700">Comment</label>
-                        <textarea id="comment" name="comment" rows="4" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"></textarea>
-                      </div>
-                      <div class="flex items-center justify-end">
-                        <button type="submit" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Submit</button>
-                      </div>
-                    </form>
-              {% else %}
-                    <!-- Message for Users Not Logged In -->
-                    <div class="alert alert-warning mt-3">
-                        To write a review, please <a href="{% url 'login' %}" class="text-blue-500">login</a> or <a href="{% url 'register' %}" class="text-blue-500">create an account</a>.
-                    </div>
-                {% endif %}
-          </div>
+         <div class="mt-6">
+    {% if user.is_authenticated %}
+        {% if user_review %}
+            <!-- User has already submitted a review -->
+            <h3 class="text-gray-900 text-xl title-font font-medium mb-4">Your Review</h3>
+            <div class="bg-gray-100 p-4 rounded-md shadow-md">
+<!--                @TODO: put score -->
+                <p class="mb-4">{{ user_review.comment }}</p>
+                <button id="editReviewButton" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" title="Click to edit your review">
+                    Edit Review
+                </button>
+            </div>
+            <form id="reviewForm" method="post" action="{% url 'update_review' product.id user_review.id %}" style="display: none;" class="mt-4 bg-gray-100 p-4 rounded-md shadow-md">
+                {% csrf_token %}
+                <div class="flex items-center mb-4" id="ratingStars">
+                    {% for star in 1|up_to:6 %}
+                        <svg class="w-8 h-8 star" data-rating="{{ star }}" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                        </svg>
+                    {% endfor %}
+                </div>
+                <input type="hidden" id="selectedRating" name="rating" value="{{ user_review.rating }}">
+                <div class="mb-4">
+                    <label for="comment" class="block text-gray-700">Comment</label>
+                    <textarea id="comment" name="comment" rows="4" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">{{ user_review.comment }}</textarea>
+                </div>
+                <div class="flex items-center justify-end">
+                    <button type="submit" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Update
+                    </button>
+                </div>
+            </form>
+        {% else %}
+            <!-- Review Form for New Review -->
+            <h3 class="text-gray-900 text-xl title-font font-medium mb-4">Write a Review</h3>
+            <form method="post" action="{% url 'add_review' product.id %}" class="bg-gray-100 p-4 rounded-md shadow-md">
+                {% csrf_token %}
+                <div class="flex items-center mb-4" id="ratingStars">
+                    {% for star in 1|up_to:6 %}
+                        <svg class="w-8 h-8 star" data-rating="{{ star }}" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                        </svg>
+                    {% endfor %}
+                </div>
+                <input type="hidden" id="selectedRating" name="rating" value="0">
+                <div class="mb-4">
+                    <label for="comment" class="block text-gray-700">Comment</label>
+                    <textarea id="comment" name="comment" rows="4" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"></textarea>
+                </div>
+                <div class="flex items-center justify-end">
+                    <button type="submit" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        {% endif %}
+    {% else %}
+        <!-- Message for Users Not Logged In -->
+        <div class="alert alert-warning mt-3">
+            To write a review, please <a href="{% url 'login' %}" class="text-blue-500">login</a> or <a href="{% url 'register' %}" class="text-blue-500">create an account</a>.
+        </div>
+    {% endif %}
+</div>
         </div>
     </div>
   </div>
 </section>
 
+<script>
+    document.getElementById('editReviewButton').addEventListener('click', function() {
+        document.getElementById('reviewForm').style.display = 'block';
+        this.style.display = 'none';
+    });
+
+    // JavaScript for handling star rating
+    document.querySelectorAll('.star').forEach(star => {
+        star.addEventListener('click', function() {
+            const rating = this.getAttribute('data-rating');
+            document.getElementById('selectedRating').value = rating;
+            document.querySelectorAll('.star').forEach(s => {
+                if (s.getAttribute('data-rating') <= rating) {
+                    s.classList.add('text-yellow-500');
+                    s.classList.remove('text-gray-300');
+                } else {
+                    s.classList.add('text-gray-300');
+                    s.classList.remove('text-yellow-500');
+                }
+            });
+        });
+    });
+
+    // Set initial star rating based on review rating
+    document.querySelectorAll('.star').forEach(star => {
+        const rating = document.getElementById('selectedRating').value;
+        if (star.getAttribute('data-rating') <= rating) {
+            star.classList.add('text-yellow-500');
+            star.classList.remove('text-gray-300');
+        } else {
+            star.classList.add('text-gray-300');
+            star.classList.remove('text-yellow-500');
+        }
+    });
+</script>
 {% endblock %}

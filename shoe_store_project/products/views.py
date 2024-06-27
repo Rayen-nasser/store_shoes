@@ -81,11 +81,16 @@ def product_detail(request, pk):
                 review.has_voted = True
                 review.user_vote = user_vote
 
+    user_review = None
+    if request.user.is_authenticated:
+        user_review = reviews.filter(user=request.user).first()
+
     return render(request, 'products/product_details.html', {
         'product': product,
         'reviews': reviews,
         'is_favorite': is_favorite,
         'avg_rating': avg_rating,
+        'user_review': user_review,
     })
 
 @login_required
@@ -118,6 +123,28 @@ def add_review(request, pk):
 
     # Redirect back to the product detail page if the request method is not POST
     return redirect('product_details', pk=product.pk)
+@login_required
+def update_review(request, product_id, review_id):
+    product = get_object_or_404(Product, id=product_id)
+    review = get_object_or_404(Review, id=review_id, user=request.user)
+
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment')
+
+        if rating and comment:
+            review.score = rating
+            review.comment = comment
+            review.save()
+            messages.success(request, 'Your review has been updated successfully!')
+            return redirect('product_details', pk=product.pk)
+
+    context = {
+        'product': product,
+        'review': review
+    }
+    return render(request, 'update_review.html', context)
+
 def get_search_options():
     categories = Category.objects.all()
     seasons = Season.objects.all()
