@@ -57,15 +57,32 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-class Rating(models.Model):
+class Review(models.Model):
     product = models.ForeignKey(Product, related_name='ratings', on_delete=models.CASCADE)
     user = models.ForeignKey(User, related_name='ratings', on_delete=models.CASCADE)
     score = models.IntegerField(default=0)  # Rating score
     comment = models.TextField(blank=True, null=True)  # Optional comment
     created_at = models.DateTimeField(auto_now_add=True)
+    likes = models.PositiveIntegerField(default=0)
+    dislikes = models.PositiveIntegerField(default=0)
 
     class Meta:
         unique_together = ('product', 'user')  # Ensure a user can rate a product only once
 
     def __str__(self):
         return f'{self.user.username} - {self.product.name} - {self.score}'
+
+class ReviewVote(models.Model):
+    review = models.ForeignKey(Review, related_name='votes', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='review_votes', on_delete=models.CASCADE)
+    like = models.BooleanField()
+
+    class Meta:
+        unique_together = ('review', 'user')  # Ensure a user can vote on a review only once
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            existing_vote = ReviewVote.objects.filter(pk=self.pk).first()
+            if existing_vote and existing_vote.like == self.like:
+                return  # No need to save if vote hasn't changed
+        super().save(*args, **kwargs)

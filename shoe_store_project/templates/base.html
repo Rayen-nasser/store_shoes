@@ -32,10 +32,12 @@
     </div>
 {% include 'includes/topbar.html' %}
 {% include 'includes/navbar.html' %}
-{% block content %}
+<div style="padding: 10px 15px;">
+    {% block content %}
 
-{% endblock %}
-{% include 'includes/footer.html' %}
+    {% endblock %}
+    {% include 'includes/footer.html' %}
+    </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
@@ -59,6 +61,31 @@
           icons.forEach(icon => icon.classList.toggle('hidden'));
         });
       });
+    });
+
+     // Optionally, close the menu when clicking outside of it
+        document.addEventListener('click', function (event) {
+            const isClickInside = sortButton.contains(event.target) || sortMenu.contains(event.target);
+            if (!isClickInside) {
+                sortMenu.classList.add('hidden');
+                sortButton.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+     document.addEventListener('DOMContentLoaded', function() {
+        const sortItems = document.querySelectorAll('.sort-item');
+
+        sortItems.forEach(item => {
+            item.addEventListener('click', function(event) {
+                // Remove active class from all items
+                sortItems.forEach(i => i.classList.remove('font-medium', 'text-gray-900'));
+                sortItems.forEach(i => i.classList.add('text-gray-500'));
+
+                // Add active class to the clicked item
+                event.target.classList.add('font-medium', 'text-gray-900');
+                event.target.classList.remove('text-gray-500');
+            });
+        });
     });
 
     document.addEventListener('DOMContentLoaded', function () {

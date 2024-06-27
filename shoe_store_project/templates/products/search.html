@@ -199,11 +199,11 @@
             </div>
             <div id="menu-sort" class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                 <div class="py-1" role="none">
-                    <a href="#" class="block px-4 py-2 text-sm font-medium text-gray-900" role="menuitem" tabindex="-1" id="menu-item-0">Most Popular</a>
-                    <a href="#" class="block px-4 py-2 text-sm text-gray-500" role="menuitem" tabindex="-1" id="menu-item-1">Best Rating</a>
-                    <a href="#" class="block px-4 py-2 text-sm text-gray-500" role="menuitem" tabindex="-1" id="menu-item-2">Newest</a>
-                    <a href="#" class="block px-4 py-2 text-sm text-gray-500" role="menuitem" tabindex="-1" id="menu-item-3">Price: Low to High</a>
-                    <a href="#" class="block px-4 py-2 text-sm text-gray-500" role="menuitem" tabindex="-1" id="menu-item-4">Price: High to Low</a>
+                    <a href="?sort=most_popular" class="block px-4 py-2 text-sm sort-item {% if sort_method == 'most_popular' %}font-medium text-gray-900{% else %}text-gray-500{% endif %}" role="menuitem" tabindex="-1" id="menu-item-0">Most Popular</a>
+                    <a href="?sort=best_rating" class="block px-4 py-2 text-sm sort-item {% if sort_method == 'best_rating' %}font-medium text-gray-900{% else %}text-gray-500{% endif %}" role="menuitem" tabindex="-1" id="menu-item-1">Best Rating</a>
+                    <a href="?sort=newest" class="block px-4 py-2 text-sm sort-item {% if sort_method == 'newest' %}font-medium text-gray-900{% else %}text-gray-500{% endif %}" role="menuitem" tabindex="-1" id="menu-item-2">Newest</a>
+                    <a href="?sort=price_low_high" class="block px-4 py-2 text-sm sort-item {% if sort_method == 'price_low_high' %}font-medium text-gray-900{% else %}text-gray-500{% endif %}" role="menuitem" tabindex="-1" id="menu-item-3">Price: Low to High</a>
+                    <a href="?sort=price_high_low" class="block px-4 py-2 text-sm sort-item {% if sort_method == 'price_high_low' %}font-medium text-gray-900{% else %}text-gray-500{% endif %}" role="menuitem" tabindex="-1" id="menu-item-4">Price: High to Low</a>
                 </div>
             </div>
 

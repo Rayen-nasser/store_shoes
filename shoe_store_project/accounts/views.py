@@ -97,8 +97,7 @@ def register(request):
 
 def logout(request):
     if request.method == 'POST':
-        print("logout")
         auth.logout(request)
-        # messages.success(request, 'You are successfully logged out.')
+        messages.success(request, 'You are successfully logged out.')
         return redirect('home')
     return redirect('home')

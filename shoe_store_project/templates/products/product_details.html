@@ -143,56 +143,135 @@
         <!-- Reviews Section -->
         <div class="mt-10 w-full">
           <h2 class="text-gray-900 text-2xl title-font font-medium mb-1">Customer Reviews</h2>
-          <!-- Reviews List -->
-          <div class="mt-6">
-            {% for review in reviews %}
-              <div class="border-t border-gray-200 py-6">
-                <div class="flex items-center">
-                  <span class="flex items-center">
-                    {% for _ in 0|up_to:review.score %}
-                <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                </svg>
-            {% endfor %}
-            {% for _ in review.score|up_to:5 %}
-                <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-gray-300" viewBox="0 0 24 24">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                </svg>
-            {% endfor %}
-                  </span>
-                  <span class="ml-4 text-gray-600">{{ review.user.username }}</span>
-                </div>
-                <p class="mt-2 text-gray-600">{{ review.comment }}</p>
-              </div>
-            {% empty %}
-              <p class="text-gray-600">No reviews yet. Be the first to review this product!</p>
-            {% endfor %}
-          </div>
+            <!-- Reviews Section -->
+            <div class="space-y-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Product Reviews</h3>
+                {% if reviews %}
+                    {% for review in reviews %}
+                    <div class="border-t border-gray-200 py-6">
+                        <div class="flex items-center mb-3">
+
+                            <!-- Avatar, Username and Email -->
+                            <div class="flex items-center ">
+                                <div class="inline-flex items-center justify-center w-12 h-12 text-xl text-white bg-indigo-500 rounded-full">
+                                    {{ review.user.username|slice:":2"|upper }}
+                                </div>
+                                <div class="ml-4">
+                                    <span class="block text-gray-600 font-bold">{{ review.user.username }}</span>
+                                    <span class="block text-gray-600 text-sm">{{ review.user.email }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Rating Stars -->
+                        <span class="flex items-center my-3">
+                                {% for _ in 0|up_to:review.score %}
+                                    <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                         class="w-4 h-4 text-yellow-500" viewBox="0 0 24 24">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                                    </svg>
+                                {% endfor %}
+                                {% for _ in review.score|up_to:5 %}
+                                    <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                         class="w-4 h-4 text-gray-300" viewBox="0 0 24 24">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                                    </svg>
+                                {% endfor %}
+                            </span>
+                        <p class="text-gray-600">{{ review.comment }}</p>
+                                            <!-- Voting Buttons -->
+                                            <div class="flex-col items-start  mt-2">
+                                                {% if not request.user.is_authenticated %}
+                                                    <span class="text-sm text-gray-500">Login to vote</span>
+                                                {% else %}
+                                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ review.num_likes }} people found this helpful</p>
+                                               <form action="{% url 'vote_review' review.pk %}" method="post">
+                                                    {% csrf_token %}
+                                                    <aside class="flex items-center mt-3">
+                                                        <div class="me-3">Was this review helpful?</div>
+                                                        {% if review.has_voted %}
+                                                            {% if review.user_vote.like %}
+                                                                <span class="inline-flex items-center text-sm font-medium text-green-600 hover:underline dark:text-green-500 ">
+                                                                     <svg class="w-3.5 h-3.5 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+                                                                        <path d="M3 7H1a1 1 0 0 0-1 1v8a2 2 0 0 0 4 0V8a1 1 0 0 0-1-1Zm12.954 0H12l1.558-4.5a1.778 1.778 0 0 0-3.331-1.06A24.859 24.859 0 0 1 6 6.8v9.586h.114C8.223 16.969 11.015 18 13.6 18c1.4 0 1.592-.526 1.88-1.317l2.354-7A2 2 0 0 0 15.954 7Z"/>
+                                                                    </svg> Yes
+                                                                </span>
+                                                                <button type="submit" name="action" value="dislike" class="inline-flex items-center text-sm font-medium text-blue-600 hover:underline dark:text-blue-500  ml-5">
+                                                                    <svg class="w-3.5 h-3.5 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+                                                                        <path d="M11.955 2.117h-.114C9.732 1.535 6.941.5 4.356.5c-1.4 0-1.592.526-1.879 1.316l-2.355 7A2 2 0 0 0 2 11.5h3.956L4.4 16a1.779 1.779 0 0 0 3.332 1.061 24.8 24.8 0 0 1 4.226-5.36l-.003-9.584ZM15 11h2a1 1 0 0 0 1-1V2a2 2 0 1 0-4 0v8a1 1 0 0 0 1 1Z"/>
+                                                                    </svg>
+                                                                    No
+                                                                </button>
+                                                            {% else %}
+                                                                <button type="submit" name="action" value="like" class="inline-flex items-center text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
+                                                                    <svg class="w-3.5 h-3.5 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+                                                                        <path d="M3 7H1a1 1 0 0 0-1 1v8a2 2 0 0 0 4 0V8a1 1 0 0 0-1-1Zm12.954 0H12l1.558-4.5a1.778 1.778 0 0 0-3.331-1.06A24.859 24.859 0 0 1 6 6.8v9.586h.114C8.223 16.969 11.015 18 13.6 18c1.4 0 1.592-.526 1.88-1.317l2.354-7A2 2 0 0 0 15.954 7Z"/>
+                                                                    </svg> Yes
+                                                                </button>
+                                                                <span class="inline-flex items-center text-sm font-medium text-red-600 hover:underline dark:text-red-500 ml-5">
+                                                                    <svg class="w-3.5 h-3.5 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+                                                                        <path d="M11.955 2.117h-.114C9.732 1.535 6.941.5 4.356.5c-1.4 0-1.592.526-1.879 1.316l-2.355 7A2 2 0 0 0 2 11.5h3.956L4.4 16a1.779 1.779 0 0 0 3.332 1.061 24.8 24.8 0 0 1 4.226-5.36l-.003-9.584ZM15 11h2a1 1 0 0 0 1-1V2a2 2 0 1 0-4 0v8a1 1 0 0 0 1 1Z"/>
+                                                                    </svg> No
+                                                                </span>
+                                                            {% endif %}
+                                                        {% else %}
+                                                            <button type="submit" name="action" value="like" class="inline-flex items-center text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
+                                                                <svg class="w-3.5 h-3.5 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+                                                                    <path d="M3 7H1a1 1 0 0 0-1 1v8a2 2 0 0 0 4 0V8a1 1 0 0 0-1-1Zm12.954 0H12l1.558-4.5a1.778 1.778 0 0 0-3.331-1.06A24.859 24.859 0 0 1 6 6.8v9.586h.114C8.223 16.969 11.015 18 13.6 18c1.4 0 1.592-.526 1.88-1.317l2.354-7A2 2 0 0 0 15.954 7Z"/>
+                                                                </svg>
+                                                                Yes
+                                                            </button>
+                                                            <button type="submit" name="action" value="dislike" class="inline-flex items-center text-sm font-medium text-blue-600 hover:underline dark:text-blue-500 group ms-5">
+                                                                <svg class="w-3.5 h-3.5 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+                                                                    <path d="M11.955 2.117h-.114C9.732 1.535 6.941.5 4.356.5c-1.4 0-1.592.526-1.879 1.316l-2.355 7A2 2 0 0 0 2 11.5h3.956L4.4 16a1.779 1.779 0 0 0 3.332 1.061 24.8 24.8 0 0 1 4.226-5.36l-.003-9.584ZM15 11h2a1 1 0 0 0 1-1V2a2 2 0 1 0-4 0v8a1 1 0 0 0 1 1Z"/>
+                                                                </svg>
+                                                                No
+                                                            </button>
+                                                        {% endif %}
+                                                    </aside>
+                                                </form>
+
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No reviews available for this product.</p>
+                {% endif %}
+            </div>
 
           <!-- Write a Review Form -->
           <div class="mt-6">
-            <h3 class="text-gray-900 text-xl title-font font-medium mb-4">Write a Review</h3>
-            <form method="post" action="{% url 'add_review' product.id %}">
-              {% csrf_token %}
-             <div class="flex items-center" id="ratingStars">
-                {% for star in 1|up_to:6 %}
-                    <svg class=" w-8 h-8 star" data-rating="{{ star }}" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                    </svg>
-                {% endfor %}
-            </div>
-            <input type="hidden" id="selectedRating" name="rating" value="0">
-              <div class="mt-4 mb-4">
-                <label for="comment" class="block text-gray-700">Comment</label>
-                <textarea id="comment" name="comment" rows="4" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"></textarea>
-              </div>
-              <div class="flex items-center justify-end">
-                <button type="submit" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Submit</button>
-              </div>
-            </form>
+               {% if user.is_authenticated %}
+                <!-- Review Form for Logged-in Users -->
+                    <h3 class="text-gray-900 text-xl title-font font-medium mb-4">Write a Review</h3>
+                    <form method="post" action="{% url 'add_review' product.id %}">
+                      {% csrf_token %}
+                     <div class="flex items-center" id="ratingStars">
+                        {% for star in 1|up_to:6 %}
+                            <svg class=" w-8 h-8 star" data-rating="{{ star }}" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                            </svg>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" id="selectedRating" name="rating" value="0">
+                      <div class="mt-4 mb-4">
+                        <label for="comment" class="block text-gray-700">Comment</label>
+                        <textarea id="comment" name="comment" rows="4" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"></textarea>
+                      </div>
+                      <div class="flex items-center justify-end">
+                        <button type="submit" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Submit</button>
+                      </div>
+                    </form>
+              {% else %}
+                    <!-- Message for Users Not Logged In -->
+                    <div class="alert alert-warning mt-3">
+                        To write a review, please <a href="{% url 'login' %}" class="text-blue-500">login</a> or <a href="{% url 'register' %}" class="text-blue-500">create an account</a>.
+                    </div>
+                {% endif %}
           </div>
         </div>
     </div>
   </div>
 </section>
+
 {% endblock %}

@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Product, Size, Color, Category, Season, GenerationCategory, Rating
+from .models import Product, Size, Color, Category, Season, GenerationCategory, Review, ReviewVote
+
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['name', 'cost', 'price', 'stock', 'category', 'season']
@@ -13,10 +14,14 @@ class ProductAdmin(admin.ModelAdmin):
 
     image_tag.allow_tags = True
 
+class ReviewVoteAdmin(admin.ModelAdmin):
+    list_display = ['review', 'user', 'like']
+
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Size)
 admin.site.register(Color)
 admin.site.register(Category)
 admin.site.register(Season)
 admin.site.register(GenerationCategory)
-admin.site.register(Rating)
+admin.site.register(Review)
+admin.site.register(ReviewVote, ReviewVoteAdmin)
