@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} | Login {% endblock %}
+{% block title %} | Search {% endblock %}
 
 {% load static %}
 {% block content %}
@@ -46,7 +46,7 @@
 
 <div class="relative z-40 mobile-menu lg:hidden">
     <div class="fixed inset-0 bg-black bg-opacity-25" aria-hidden="true"></div>
-    <div class="fixed inset-0 z-40 lg:flex transition-transform duration-300 ease-in-out">
+    <div class="fixed inset-0 z-40 lg:flex transition-transform duration-300 ease-in-out ">
         <div class="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl  ">
             <div class="flex items-center justify-between px-4">
                 <h2 class="text-lg font-medium text-gray-900">Filters</h2>
@@ -92,7 +92,7 @@
                       <div class="space-y-6">
                         {% for generation in generations %}
                         <div class="flex items-center">
-                          <input  name="generation" value="{{ generation }}" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {% if generation in selected_generations %}checked{% endif %}>
+                          <input  name="generation" value="{{ generation }}" type="radio" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" {% if generation in selected_generations %}checked{% endif %}>
                           <label  class="ml-3 text-sm text-gray-600">{{ generation }}</label>
                         </div>
                         {% endfor %}
@@ -118,7 +118,7 @@
                         <div class="space-y-6">
                             {% for category in categories %}
                             <div class="flex items-center">
-                              <input  name="category" value="{{ category }}" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {% if category in selected_categories %}checked{% endif %}>
+                              <input  name="category" value="{{ category }}" type="radio" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" {% if category in selected_categories %}checked{% endif %}>
                               <label  class="ml-3 text-sm text-gray-600">{{ category }}</label>
                             </div>
                             {% endfor %}
@@ -144,7 +144,7 @@
                         <div class="space-y-6">
                             {% for size in sizes %}
                             <div class="flex items-center">
-                              <input  name="size" value="{{ size }}" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {% if size in selected_sizes %}checked{% endif %}>
+                              <input  name="size" value="{{ size }}" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" {% if size in selected_sizes %}checked{% endif %}>
                               <label  class="ml-3 text-sm text-gray-600">{{ size }}</label>
                             </div>
                             {% endfor %}
@@ -170,7 +170,7 @@
                         <div class="space-y-6">
                             {% for color in colors %}
                             <div class="flex items-center">
-                              <input  name="color" value="{{ color }}" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {% if color in selected_colors %}checked{% endif %}>
+                              <input  name="color" value="{{ color }}" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" {% if color in selected_colors %}checked{% endif %}>
                               <label  class="ml-3 text-sm text-gray-600">{{ color }}</label>
                             </div>
                             {% endfor %}
@@ -254,7 +254,7 @@
               <div class="space-y-4">
                 {% for generation in generations %}
                 <div class="flex items-center">
-                  <input  name="generation" value="{{ generation }}" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {% if generation in selected_generations %}checked{% endif %}>
+                  <input  name="generation" value="{{ generation }}" type="radio" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" {% if generation in selected_generations %}checked{% endif %}>
                   <label  class="ml-3 text-sm text-gray-600">{{ generation }}</label>
                 </div>
                 {% endfor %}
@@ -280,7 +280,7 @@
                   <div class="space-y-4">
                     {% for category in categories %}
                     <div class="flex items-center">
-                      <input  name="category" value="{{ category }}" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {% if category in selected_categories %}checked{% endif %}>
+                      <input  name="category" value="{{ category }}" type="radio" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" {% if category in selected_categories %}checked{% endif %}>
                       <label  class="ml-3 text-sm text-gray-600">{{ category }}</label>
                     </div>
                     {% endfor %}
@@ -306,7 +306,7 @@
                   <div class="space-y-4">
                     {% for color in colors %}
                     <div class="flex items-center">
-                      <input id="filter-color-{{ forloop.counter }}" name="color" value="{{ color }}" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {% if color in selected_colors %}checked{% endif %}>
+                      <input id="filter-color-{{ forloop.counter }}" name="color" value="{{ color }}" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" {% if color in selected_colors %}checked{% endif %}>
                       <label for="filter-color-{{ forloop.counter }}" class="ml-3 text-sm text-gray-600">{{ color }}</label>
                     </div>
                     {% endfor %}
@@ -332,7 +332,7 @@
                   <div class="space-y-4">
                     {% for size in sizes %}
                     <div class="flex items-center">
-                      <input id="filter-size-{{ forloop.counter }}" name="size" value="{{ size }}" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {% if size in selected_sizes %}checked{% endif %}>
+                      <input id="filter-size-{{ forloop.counter }}" name="size" value="{{ size }}" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" {% if size in selected_sizes %}checked{% endif %}>
                       <label for="filter-size-{{ forloop.counter }}" class="ml-3 text-sm text-gray-600">{{ size }}</label>
                     </div>
                     {% endfor %}

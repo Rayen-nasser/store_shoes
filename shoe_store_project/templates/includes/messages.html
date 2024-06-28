@@ -11,9 +11,9 @@
   <div class="fixed top-4 right-4 z-50 space-y-4">
     {% for message in messages %}
       <div id="message-{{ forloop.counter }}" class="alert {{ message.tags|tailwind_message_class }} p-4 rounded-lg relative flex items-center" role="alert">
-        <button type="button" class="close text-gray-700 hover:text-gray-900 focus:outline-none absolute top-0 right-0 mt-2 mr-2" onclick="closeMessage('message-{{ forloop.counter }}')" aria-label="Close">
-          <span class="text-xl" aria-hidden="true">&times;</span>
-        </button>
+<!--        <button type="button" class="close text-gray-700 hover:text-gray-900 focus:outline-none absolute top-0 right-0 mt-2 mr-2" onclick="closeMessage('message-{{ forloop.counter }}')" aria-label="Close">-->
+<!--          <span class="text-xl" aria-hidden="true">&times;</span>-->
+<!--        </button>-->
         <strong class="mr-2">
           {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
             Error:

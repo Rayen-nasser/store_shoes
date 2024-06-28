@@ -12,7 +12,7 @@ from accounts.models import SaveFavorite
 
 def home(request):
     products_list = Product.objects.order_by('-created_date')
-    paginator = Paginator(products_list, 8)  # Show 8 products per page
+    paginator = Paginator(products_list, 6)  # Show 8 products per page
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)

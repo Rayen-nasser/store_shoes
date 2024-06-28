@@ -31,7 +31,7 @@ def products(request):
     for product in products_list:
         product.is_favorite = product.id in favorite_product_ids
 
-    paginator = Paginator(products_list, 8)  # Show 8 products per page
+    paginator = Paginator(products_list, 6)  # Show 8 products per page
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)

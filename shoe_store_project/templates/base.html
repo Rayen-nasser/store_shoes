@@ -3,7 +3,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+     <!-- Meta tags, title, etc. -->
+    <title>Store Shoes {% block title %}  {% endblock %}</title>
+     <!-- Favicon icon -->
+    <link rel="icon" type="image/png" href="{% static 'img/favicon_4.png' %}">
+
+    <!-- Favicon icon -->
+    <link rel="shortcut icon" href="{% static 'img/favicon_4.png' %}" type="image/x-icon" >
+
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -30,13 +37,13 @@
     <div class="fixed top-4 right-4 z-50 space-y-4">
         {% include 'includes/messages.html' %}
     </div>
-{% include 'includes/topbar.html' %}
-{% include 'includes/navbar.html' %}
-<div style="padding: 10px 15px;">
-    {% block content %}
+    {% include 'includes/topbar.html' %}
+    {% include 'includes/navbar.html' %}
+    <div style="padding: 10px 15px;">
+        {% block content %}
 
-    {% endblock %}
-    {% include 'includes/footer.html' %}
+        {% endblock %}
+        {% include 'includes/footer.html' %}
     </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
