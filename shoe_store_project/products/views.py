@@ -211,6 +211,11 @@ def search(request):
     for product in filtered_products:
         product.is_favorite = product.id in favorite_product_ids
 
+    paginator = Paginator(filtered_products, 9)
+
+    page_number = request.GET.get('page')
+    filtered_products = paginator.get_page(page_number)
+
     context = {
         'products': filtered_products,
         'selected_filters': selected_filters,
